@@ -1,4 +1,5 @@
 import os
+
 import requests
 from dotenv import load_dotenv
 
@@ -7,8 +8,9 @@ load_dotenv()
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 URL = "https://api.telegram.org/bot" + TELEGRAM_TOKEN
 
+
 def send_telegram(chat_id):
-    text = f'На проверку добавлена новая ссылка'
+    text = 'На проверку добавлена новая ссылка'
     method = URL + "/sendMessage"
     data = {
         "chat_id": chat_id,

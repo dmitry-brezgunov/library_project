@@ -1,12 +1,15 @@
 from django import forms
-from .models import Post, Group
+
+from .models import Group, Post
+
 
 class PostForm(forms.ModelForm):
 
     def clean_url(self):
         url = self.cleaned_data['url']
         if Post.objects.filter(url=url).exists():
-            raise forms.ValidationError("Запись с такой ссылкой уже существует в базе")
+            raise forms.ValidationError(
+                  "Запись с такой ссылкой уже существует в базе")
         return url
 
     class Meta:
@@ -15,6 +18,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             "group": forms.SelectMultiple(attrs={"size": 3})
         }
+
 
 class GroupForm(forms.ModelForm):
     class Meta:

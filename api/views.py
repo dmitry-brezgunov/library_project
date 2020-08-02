@@ -1,19 +1,14 @@
 import os
 
-from django.shortcuts import get_object_or_404
 from dotenv import load_dotenv
-
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from posts.models import Group, Post
 
 from .permissions import IsAdminOrReadOnly
-from .serializers import PostSerializer, GroupSerializer
+from .serializers import GroupSerializer, PostSerializer
 from .telegram import send_telegram
-
 
 load_dotenv()
 CHAT_ID = os.getenv("CHAT_ID")

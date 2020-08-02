@@ -1,32 +1,40 @@
 import os
-from django.shortcuts import render, get_object_or_404, redirect
+
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect, render
 # from django.contrib.auth.decorators import login_required
 # from pytils.translit import slugify
 from dotenv import load_dotenv
+
 from api.telegram import send_telegram
-from .models import Post, Group # User
-from .forms import PostForm # GroupForm
+
+from .forms import PostForm  # GroupForm
+from .models import Group, Post  # User
 
 load_dotenv()
 
 CHAT_ID = os.getenv('CHAT_ID')
+
 
 def index(request):
     post_list = Post.objects.filter(approved=True).order_by("-pub_date")
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'index.html', {'page': page, 'paginator': paginator})
+    return render(
+        request, 'index.html', {'page': page, 'paginator': paginator})
 
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    post_list = Post.objects.filter(group=group, approved=True).order_by("-pub_date")
+    post_list = Post.objects.filter(
+        group=group, approved=True).order_by("-pub_date")
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, "group.html", {'group': group, 'page': page, 'paginator': paginator})
+    return render(
+        request, "group.html", {
+            'group': group, 'page': page, 'paginator': paginator})
 
 
 # @login_required
@@ -57,7 +65,9 @@ def new_post(request):
 #         form = PostForm(instance=post)
 #     else:
 #         return redirect('post', post_id=post.pk)
-#     return render(request, "new_post.html", {"form": form, "post": post, "title": title})
+#     return render(
+#         request, "new_post.html", {
+#             "form": form, "post": post, "title": title})
 
 
 # def profile(request, username):
@@ -89,7 +99,8 @@ def server_error(request):
 #             group.slug = slugify(group.title)
 #             form.save()
 #             return redirect("group", slug=group.slug)
-#         return render(request, "new_post.html", {'form': form, 'title': title})
+#         return render(
+#             request, "new_post.html", {'form': form, 'title': title})
 #     form = GroupForm()
 #     return render(request, "new_post.html", {'form': form, 'title': title})
 
